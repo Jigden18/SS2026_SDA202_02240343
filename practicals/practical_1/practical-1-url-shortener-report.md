@@ -137,7 +137,7 @@ This is the core of the chapter. The author explores two approaches to generatin
 - If a collision occurs (same 7 characters for different URLs), append a predefined string and rehash
 - Use a Bloom filter to check for collisions efficiently without querying the database each time
 
-![hash and collision resolution flow](./public/image-2.png)
+![hash and collision resolution flow](./public/image-3.png)
 
 The character set has 62 possible values (0-9, a-z, A-Z). The minimum hash length needed is calculated as the smallest n where 62^n covers 365 billion records. At n=7, 62^7 gives approximately 3.5 trillion combinations which is sufficient.
 
