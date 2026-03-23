@@ -86,7 +86,7 @@ This is a minimal and clean design that covers both core use cases without overc
 
 ### 3.2 URL Redirection: 301 vs 302
 
-![server-client communication](image.png)
+![server-client communication](./public/image.png)
 
 The author raises an interesting point about HTTP redirect codes. This is not just a technical detail, it is a product decision.
 
@@ -130,18 +130,18 @@ This is the core of the chapter. The author explores two approaches to generatin
 
 **Approach 1: Hash + Collision Resolution**
 
-![hash-function and value](image-1.png)
+![hash-function and value](./public/image-1.png)
 
 - Apply a hash function (CRC32, MD5, SHA-1) to the long URL
 - Take the first 7 characters of the output
 - If a collision occurs (same 7 characters for different URLs), append a predefined string and rehash
 - Use a Bloom filter to check for collisions efficiently without querying the database each time
 
-![hash and collision resolution flow](image-3.png)
+![hash and collision resolution flow](./public/image-2.png)
 
 The character set has 62 possible values (0-9, a-z, A-Z). The minimum hash length needed is calculated as the smallest n where 62^n covers 365 billion records. At n=7, 62^7 gives approximately 3.5 trillion combinations which is sufficient.
 
-![hash combinations](image-6.png)
+![hash combinations](./public/image-6.png)
 
 **Approach 2: Base 62 Conversion**
 
@@ -151,7 +151,7 @@ The character set has 62 possible values (0-9, a-z, A-Z). The minimum hash lengt
 - Because the ID is always unique, the resulting short URL is always unique with no collision possible
 
 
-![base 62 flow](image-4.png)
+![base 62 flow](./public/image-4.png)
 
 **Comparison of Both Approaches:**
 
@@ -164,7 +164,7 @@ The character set has 62 possible values (0-9, a-z, A-Z). The minimum hash lengt
 
 ### 3.5 URL Redirecting Flow
 
-![URL redirecting flow](image-5.png)
+![URL redirecting flow](./public/image-5.png)
 
 The author describes the redirecting architecture using:
 
