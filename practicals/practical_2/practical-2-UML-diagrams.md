@@ -117,8 +117,8 @@ The current workflow relies on a monolithic LMS to orchestrate a complex sequenc
 
 - LMS → TurnItIn: Simultaneously, the LMS sends the submission to TurnItIn to generate an originality report.  
 
-**Consolidation Note:**
- The results from both plagiarism checks are consolidated before grading proceeds.  
+- *Consolidation Note:*
+ *The results from both plagiarism checks are consolidated before grading proceeds.*  
 
 **Decision Point — Similarity Threshold**
 
