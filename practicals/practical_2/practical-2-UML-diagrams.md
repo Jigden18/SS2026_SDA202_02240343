@@ -84,38 +84,72 @@ interactions
 [![Actor-to-Actor IoD](image.png)](https://excalidraw.com/#json=KCkABYCXdNwMfThR4qS03,bM-tEHDj-KWVVse-0w6eaQ)
 
 **What this diagram shows:**
-- How people and systems interact right now (without the new system)
-- Helps confirm we understand the real workflow before designing
 
-**Sequence 1 — Professor Sets Up Assignment:**
-- Professor creates assignment
-- Sets rubric and grading rules
-- Sets submission deadline
-- LMS confirms assignment is published
+The current workflow relies on a monolithic LMS to orchestrate a complex sequence of events: receiving submissions, managing deadlines, coordinating with internal and external integrity services, automating grading, and handling compliance reporting. This centralized logic creates dependencies where a failure in the LMS can halt the entire grading pipeline.
 
-**Sequence 2 — Assignment Rejected:**
-- If professor forgot to configure something
-- LMS rejects the assignment
-- Professor gets notification to fix it
+**Sequence 1 — Professor Sets Up Assignment**
 
-**Sequence 3 — Student Submits Code:**
-- Student uploads source code
-- LMS records which attempt number this is (1st, 2nd, etc.)
-- Student can submit multiple times
+Professor → LMS: The professor creates the assignment, providing the rubric, grading criteria, and deadline.  
 
-**Sequence 4 — Deadline Check:**
-- LMS Timer checks if submission is before deadline
-- If late: submission rejected
-- Student gets rejection notice
+LMS → Professor: The LMS confirms that the assignment has been configured and published successfully.  
 
-**Sequence 5 — Valid Submission Trigger:**
-- When submission passes deadline check
-- Event triggers the grading process
-- Professor, Student, LMS, and Timer all involved before grading starts
+**Sequence 2 — Assignment Rejected (Configuration Failure)**
 
-**Key takeaway:**
-- Four parties interact before any grading happens
-- Any automated system must support these interactions
+LMS → Professor: If the assignment is not correctly configured (e.g., missing rubric or criteria), the LMS sends a "notifyNotConfigured" message to the professor.  
+
+Professor → LMS: The professor acknowledges the notification, presumably after correcting the configuration.  
+
+**Sequence 3 — Student Submits Code**
+
+Student → LMS: The student uploads their source code for the assignment.  
+
+LMS → Student: The LMS confirms receipt and notes the submission attempt number (e.g., attempt 1, 2, etc.).  
+
+**Sequence 4 — Deadline Check (LMS Timer)**
+
+LMS Timer → LMS: The timer service queries the LMS to verify whether the submission was made before the deadline.  
+
+LMS → LMS Timer: The LMS responds with the status (e.g., "on-time" or "late").  
+
+**Sequence 5 — Valid Submission Triggers Integrity & Grading Pipeline**
+
+LMS → Internal Comparator: The LMS sends the submission to the internal LMS Comparator for cross-referencing against other submissions to generate a similarity score.  
+
+LMS → TurnItIn: Simultaneously, the LMS sends the submission to TurnItIn to generate an originality report.  
+
+**Consolidation Note:**
+ The results from both plagiarism checks are consolidated before grading proceeds.  
+
+**Decision Point — Similarity Threshold**
+
+- **If threshold is exceeded:** The LMS flags an integrity violation and sends a "violationAlert" and "penaltyRuling" to the Professor.  
+- **If threshold is not exceeded:** The submission is considered clear and proceeds to grading.  
+
+**Sequence 6 — Grading & Score Calculation**
+
+LMS Grader → LMS: The grader runs automated tests on the submission and computes the final score.  
+
+LMS → Student: The final grade is delivered to the student.  
+
+**Sequence 7 — Compliance & Audit Trail**
+
+LMS → Regulatory Body: The LMS compiles a complete audit package (including submission details, integrity reports, and the final grade) and exports it to the regulatory body for compliance records.  
+
+Regulatory Body → LMS: The regulatory body confirms receipt of the audit logs.  
+
+**Key Takeaways**
+
+- The LMS acts as the central orchestrator, managing all interactions: assignment setup, submission handling, deadline enforcement, plagiarism detection, grading, and audit reporting.  
+
+- Deadline enforcement is delegated to a separate timer service, but the LMS still controls the logic for determining late vs. on-time submissions.  
+
+- Plagiarism detection is split between an internal comparator (for peer similarity) and an external service (TurnItIn), with results consolidated before grading.  
+
+- The workflow includes a manual intervention point where the professor is alerted to configuration errors and integrity violations, requiring acknowledgment before the process continues.  
+
+- All actions are logged for regulatory compliance, with a final audit package exported after grading is complete.  
+
+- The process is largely automated once a valid submission passes the deadline check, but it relies heavily on the LMS to maintain state and orchestrate calls to multiple external services.
 
 ---
 
@@ -176,7 +210,7 @@ interactions
 
 
 **What this diagram shows:**
-- How everything works together with the new system
+- How everything works together with the system
 - Complete workflow from start to finish
 
 **Phase 1 — Assignment Setup:**
