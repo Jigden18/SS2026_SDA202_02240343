@@ -89,33 +89,33 @@ The current workflow relies on a monolithic LMS to orchestrate a complex sequenc
 
 **Sequence 1 — Professor Sets Up Assignment**
 
-Professor → LMS: The professor creates the assignment, providing the rubric, grading criteria, and deadline.  
+- Professor → LMS: The professor creates the assignment, providing the rubric, grading criteria, and deadline.  
 
-LMS → Professor: The LMS confirms that the assignment has been configured and published successfully.  
+- LMS → Professor: The LMS confirms that the assignment has been configured and published successfully.  
 
 **Sequence 2 — Assignment Rejected (Configuration Failure)**
 
-LMS → Professor: If the assignment is not correctly configured (e.g., missing rubric or criteria), the LMS sends a "notifyNotConfigured" message to the professor.  
+- LMS → Professor: If the assignment is not correctly configured (e.g., missing rubric or criteria), the LMS sends a "notifyNotConfigured" message to the professor.  
 
-Professor → LMS: The professor acknowledges the notification, presumably after correcting the configuration.  
+- Professor → LMS: The professor acknowledges the notification, presumably after correcting the configuration.  
 
 **Sequence 3 — Student Submits Code**
 
-Student → LMS: The student uploads their source code for the assignment.  
+- Student → LMS: The student uploads their source code for the assignment.  
 
-LMS → Student: The LMS confirms receipt and notes the submission attempt number (e.g., attempt 1, 2, etc.).  
+- LMS → Student: The LMS confirms receipt and notes the submission attempt number (e.g., attempt 1, 2, etc.).  
 
 **Sequence 4 — Deadline Check (LMS Timer)**
 
-LMS Timer → LMS: The timer service queries the LMS to verify whether the submission was made before the deadline.  
+- LMS Timer → LMS: The timer service queries the LMS to verify whether the submission was made before the deadline.  
 
-LMS → LMS Timer: The LMS responds with the status (e.g., "on-time" or "late").  
+- LMS → LMS Timer: The LMS responds with the status (e.g., "on-time" or "late").  
 
 **Sequence 5 — Valid Submission Triggers Integrity & Grading Pipeline**
 
-LMS → Internal Comparator: The LMS sends the submission to the internal LMS Comparator for cross-referencing against other submissions to generate a similarity score.  
+- LMS → Internal Comparator: The LMS sends the submission to the internal LMS Comparator for cross-referencing against other submissions to generate a similarity score.  
 
-LMS → TurnItIn: Simultaneously, the LMS sends the submission to TurnItIn to generate an originality report.  
+- LMS → TurnItIn: Simultaneously, the LMS sends the submission to TurnItIn to generate an originality report.  
 
 **Consolidation Note:**
  The results from both plagiarism checks are consolidated before grading proceeds.  
@@ -127,15 +127,15 @@ LMS → TurnItIn: Simultaneously, the LMS sends the submission to TurnItIn to ge
 
 **Sequence 6 — Grading & Score Calculation**
 
-LMS Grader → LMS: The grader runs automated tests on the submission and computes the final score.  
+- LMS Grader → LMS: The grader runs automated tests on the submission and computes the final score.  
 
-LMS → Student: The final grade is delivered to the student.  
+- LMS → Student: The final grade is delivered to the student.  
 
 **Sequence 7 — Compliance & Audit Trail**
 
-LMS → Regulatory Body: The LMS compiles a complete audit package (including submission details, integrity reports, and the final grade) and exports it to the regulatory body for compliance records.  
+- LMS → Regulatory Body: The LMS compiles a complete audit package (including submission details, integrity reports, and the final grade) and exports it to the regulatory body for compliance records.  
 
-Regulatory Body → LMS: The regulatory body confirms receipt of the audit logs.  
+- Regulatory Body → LMS: The regulatory body confirms receipt of the audit logs.  
 
 **Key Takeaways**
 
